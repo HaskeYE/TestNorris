@@ -1,19 +1,19 @@
-package com.example.testnorris.ui
+package com.example.testnorris
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testnorris.R
 
 class CustomRecyclerAdapter(private val jokes: List<String>) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var largeTextView: TextView? = null
+        var smallTextView: TextView? = null
+
         init {
-            largeTextView = itemView.findViewById(R.id.textView)
+            smallTextView = itemView.findViewById(R.id.textView)
         }
     }
 
@@ -25,7 +25,7 @@ class CustomRecyclerAdapter(private val jokes: List<String>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.largeTextView?.text = jokes[position]
+        holder.smallTextView?.text = jokes[position]
     }
 
     override fun getItemCount() = jokes.size

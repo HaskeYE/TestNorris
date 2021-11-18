@@ -6,18 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.testnorris.R
-import com.example.testnorris.databinding.FragmentDashboardBinding
+import com.example.testnorris.databinding.FragmentWebBinding
 
-class DashboardFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+class WebFragment : Fragment() {
+
+    private lateinit var webViewModel: WebViewModel
     private lateinit var webView: WebView
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentWebBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -28,15 +26,16 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        webViewModel =
+            ViewModelProvider(this).get(WebViewModel::class.java)
+        _binding = FragmentWebBinding.inflate(inflater, container, false)
         val root: View = binding.root
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val webView: WebView = binding.webview
         webView.settings.setJavaScriptEnabled(true)
         webView.webViewClient = object : WebViewClient() {
