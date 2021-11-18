@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.testnorris.databinding.ActivityMainBinding
+import com.example.testnorris.ui.dashboard.DashboardFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,4 +30,5 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
 }
