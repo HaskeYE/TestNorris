@@ -43,7 +43,6 @@ class WebFragment : Fragment() {
         else
             webView.loadUrl("https://www.icndb.com/api/")
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

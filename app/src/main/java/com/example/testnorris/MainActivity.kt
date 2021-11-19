@@ -1,13 +1,14 @@
 package com.example.testnorris
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.testnorris.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +29,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    //For system back button working properly with WebView
+    override fun onBackPressed() {
+        var webView = findViewById<WebView>(R.id.webview)
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else if (!fragmentManager.popBackStackImmediate()) {
+                super.onBackPressed()
+            }
     }
 
 }
