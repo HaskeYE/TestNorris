@@ -1,34 +1,26 @@
 package com.example.testnorris
-
-import android.os.Bundle
-import android.text.Html
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+//For now this is out of use - will be in cycle in final build
 import okhttp3.*
-import org.json.JSONObject
 import java.io.IOException
 
-class HTTPServices: AppCompatActivity() {
+class HTTPServices {
     val URL = "https://api.icndb.com/jokes/random/"
     var okHttpClient: OkHttpClient = OkHttpClient()
 
-    public fun getJokes(num: Int): List<String> {
+    fun getJokes(num: Int): List<String> {
         var out = emptyList<String>()
         var usableUrl = URL + num.toString()
         val request: Request = Request.Builder().url(usableUrl).build()
         okHttpClient.newCall(request).enqueue(object: Callback {
             override fun onFailure(call: Call?, e: IOException?) {
             }
-
             override fun onResponse(call: Call?, response: Response?) {
-                val json = response?.body()?.string()
-                val got = JSONObject(json).getJSONObject("value").toString().
-                split(" \"joke\": \"")
-                for (i in 1 until got.size) {
-                    out += got[i].split("\"")[0]
-                }
+                val json = response?.body()?.string().toString().split("\"joke\": \"")
+                for (i in 1 until json.size)
+                    out = out + json[i].split("\", \"categories\"")[0]
             }
         })
-    return out
+        Thread.sleep(1000)
+        return out
     }
 }

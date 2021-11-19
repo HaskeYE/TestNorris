@@ -27,15 +27,13 @@ class WebFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         webViewModel =
-            ViewModelProvider(this).get(WebViewModel::class.java)
+            ViewModelProvider(this)[WebViewModel::class.java]
         _binding = FragmentWebBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+        //loading URL into our WebView
         val webView: WebView = binding.webview
         webView.settings.setJavaScriptEnabled(true)
         webView.webViewClient = object : WebViewClient() {
