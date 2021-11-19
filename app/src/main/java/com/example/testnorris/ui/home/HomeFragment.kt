@@ -17,6 +17,7 @@ import kotlinx.coroutines.*
 import okhttp3.*
 import java.io.IOException
 
+
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
@@ -45,10 +46,11 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         val button: Button = binding.button
         button.setOnClickListener {
-            //Needed this toInt because this is guarantee that definitely number was entered
+            //Going coroutines! This will make our loading faster and will provide result awaiting
             try {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val list = getJokes(editText.text.toString().toInt())
+                    //Needed this toInt because this is guarantee that definitely number was entered
+                    val list = HTTPhelper.getJokes(editText.text.toString().toInt())
                     launch(Dispatchers.Main) {
                         recyclerView.adapter = CustomRecyclerAdapter(list)
                     }
@@ -64,29 +66,6 @@ class HomeFragment : Fragment() {
 
     private val url = "https://api.icndb.com/jokes/random/"
     var okHttpClient: OkHttpClient = OkHttpClient()
-
-
-    private suspend fun getJokes(num: Int): List<String> = coroutineScope {
-        var out = emptyList<String>()
-        val usableUrl = url + num.toString()
-        val request: Request = Request.Builder().url(usableUrl).build()
-        val response = async { okHttpClient.newCall(request).execute() }.await()
-        response.use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            else {
-                //If we got answer we are trying to parse received json into list array
-                //Maybe not a smartest choice but reliable - maybe will be replaced in final ver
-                val json = async {
-                    response?.body()?.string().toString().split("\"joke\": \"")
-                }.await()
-                for (i in 1 until json.size)
-                    out = out + json[i].split("\", \"categories\"")[0]
-
-            }
-            return@coroutineScope out
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,0 +1,1 @@
+This is program for HedgehogTech hiring process
