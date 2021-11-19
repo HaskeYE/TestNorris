@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testnorris.CustomRecyclerAdapter
 import com.example.testnorris.databinding.FragmentHomeBinding
+import kotlinx.coroutines.*
 import okhttp3.*
 import java.io.IOException
 
@@ -46,8 +47,12 @@ class HomeFragment : Fragment() {
         button.setOnClickListener {
             //Needed this toInt because this is guarantee that definitely number was entered
             try {
-                val list = getJokes(editText.text.toString().toInt())
-                recyclerView.adapter = CustomRecyclerAdapter(list)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val list = getJokes(editText.text.toString().toInt())
+                    launch(Dispatchers.Main) {
+                        recyclerView.adapter = CustomRecyclerAdapter(list)
+                    }
+                }
             } catch (e: NumberFormatException) {
                 Toast.makeText(
                     this.context, "Don't fool me: can't see here a numeric value",
@@ -57,28 +62,31 @@ class HomeFragment : Fragment() {
         }
     }
 
-    val url = "https://api.icndb.com/jokes/random/"
+    private val url = "https://api.icndb.com/jokes/random/"
     var okHttpClient: OkHttpClient = OkHttpClient()
 
-    fun getJokes(num: Int): List<String> {
+
+    private suspend fun getJokes(num: Int): List<String> = coroutineScope {
         var out = emptyList<String>()
         val usableUrl = url + num.toString()
         val request: Request = Request.Builder().url(usableUrl).build()
-        okHttpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call?, e: IOException?) {
-                throw IOException("no answer from server")
-            }
-            //If we got answer we are trying to parse received json into list array
-            override fun onResponse(call: Call?, response: Response?) {
+        val response = async { okHttpClient.newCall(request).execute() }.await()
+        response.use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            else {
+                //If we got answer we are trying to parse received json into list array
                 //Maybe not a smartest choice but reliable - maybe will be replaced in final ver
-                val json = response?.body()?.string().toString().split("\"joke\": \"")
+                val json = async {
+                    response?.body()?.string().toString().split("\"joke\": \"")
+                }.await()
                 for (i in 1 until json.size)
                     out = out + json[i].split("\", \"categories\"")[0]
+
             }
-        })
-        Thread.sleep(400)
-        return out
+            return@coroutineScope out
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

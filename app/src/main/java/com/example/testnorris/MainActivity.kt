@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     //For system back button working properly with WebView
     override fun onBackPressed() {
-        var webView = findViewById<WebView>(R.id.webview)
+        val webView = findViewById<WebView>(R.id.webview)
             if (webView.canGoBack()) {
                 webView.goBack()
             } else if (!fragmentManager.popBackStackImmediate()) {
