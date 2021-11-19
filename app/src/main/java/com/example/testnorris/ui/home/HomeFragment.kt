@@ -74,9 +74,9 @@ class HomeFragment : Fragment() {
                 val json = response?.body()?.string().toString().split("\"joke\": \"")
                 for (i in 1 until json.size)
                     out = out + json[i].split("\", \"categories\"")[0]
-
             }
         })
+        Thread.sleep(400)
         return out
     }
 
