@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = CustomRecyclerAdapter(emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         val button: Button = binding.button
-        button.setOnClickListener() {
+        button.setOnClickListener {
             //Needed this toInt because this is guarantee that definitely number was entered
             try {
                 val list = getJokes(editText.text.toString().toInt())
@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
 
     fun getJokes(num: Int): List<String> {
         var out = emptyList<String>()
-        var usableUrl = url + num.toString()
+        val usableUrl = url + num.toString()
         val request: Request = Request.Builder().url(usableUrl).build()
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call?, e: IOException?) {
