@@ -2,4 +2,6 @@
     <string name="app_name">TestNorris</string>
     <string name="title_home">Jokes</string>
     <string name="title_web">Web</string>
+    <string name="reload">Reload</string>
+    <string name="number_of_jokes_here">Number of jokes here</string>
 </resources>
