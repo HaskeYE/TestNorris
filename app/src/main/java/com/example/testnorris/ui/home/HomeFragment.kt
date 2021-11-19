@@ -48,12 +48,13 @@ class HomeFragment : Fragment() {
         button.setOnClickListener {
             //Going coroutines! This will make our loading faster and will provide result awaiting
             try {
+                //Needed this toInt because this is guarantee that definitely number was entered
+                editText.text.toString().toInt()
                 CoroutineScope(Dispatchers.IO).launch {
-                    //Needed this toInt because this is guarantee that definitely number was entered
-                    val list = HTTPhelper.getJokes(editText.text.toString().toInt())
-                    launch(Dispatchers.Main) {
-                        recyclerView.adapter = CustomRecyclerAdapter(list)
-                    }
+                        val list = HTTPhelper.getJokes(editText.text.toString().toInt())
+                        launch(Dispatchers.Main) {
+                            recyclerView.adapter = CustomRecyclerAdapter(list)
+                        }
                 }
             } catch (e: NumberFormatException) {
                 Toast.makeText(
