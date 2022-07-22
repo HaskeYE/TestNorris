@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private val url = "https://api.icndb.com/jokes/random/"
+    private val url = "https://api.chucknorris.io/jokes/random/"
     var okHttpClient: OkHttpClient = OkHttpClient()
 
     override fun onDestroyView() {
